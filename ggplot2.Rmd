@@ -1,0 +1,80 @@
+---
+title: "ggplot2"
+author: "Toufic Mayassi"
+date: "September 15, 2015"
+output: html_document
+---
+# load the data
+
+```{r}
+counts_raw <- read.delim("data//counts-raw.txt.gz")
+counts_norm <- read.delim("data//counts-norm.txt.gz")
+```
+
+#dplyr
+
+```{r}
+library("dplyr")
+```
+
+
+
+```{r}
+research <- filter(counts_raw, articleType == "Research Article")
+
+
+#ggplot2
+
+```{r}
+library("ggplot2")
+```
+
+```{r}
+p <- ggplot(data = research, mapping = aes(x = pdfDownloadsCount,
+                                           y = wosCountThru2011))
+p + geom_point()
+```
+
+# Challenge 
+
+```{r}
+p <- ggplot(data = research, mapping = aes(x = daysSincePublished,
+                                           y = wosCountThru2011)) + geom_point(aes(color = journal), alpha = 0.5) + geom_smooth(color = "red")
+
+p
+```
+
+# controlling the plot scales
+
+```{r}
+p <- ggplot(research, aes(x = pdfDownloadsCount,
+                          y = wosCountThru2011)) +
+  geom_point(aes(color = journal)) +
+  geom_smooth()
+p
+
+p + scale_x_log10() + scale_y_log10()
+```
+
+# scales challenge 
+
+```{r}
+p <- ggplot(research, aes(x = sqrt(pdfDownloadsCount),
+                          y = sqrt(wosCountThru2011))) + geom_point(aes(color = journal)) +
+  geom_smooth() + 
+  scale_color_brewer(palette = "Accent")
+p
+```
+
+# subplots with facets
+
+```{r}
+p + facet_wrap(~journal)
+```
+
+# geoms challenge (I Couldnt get it)
+
+```{r}
+research <- mutate(research, mean = backtweetsCount/journal)
+```
+
